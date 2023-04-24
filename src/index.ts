@@ -1,23 +1,35 @@
 import net from 'net'
 import fs from 'fs'
 import path from 'path'
+import generate from './generate'
 
-const proxiesFile = fs.readFileSync(
-  path.join(process.cwd(), 'proxies.txt'),
-  'utf-8'
-)
+const main = async () => {
+  const options = process.argv.slice(2)
 
-const proxies = proxiesFile
-  .split('\n')
-  .filter((proxy) => !!proxy)
-  .map((proxy) => proxy.split(':'))
+  const proxiesPath = path.join(process.cwd(), 'proxies.txt')
 
-const checkProxies = async () => {
+  const proxiesFile = fs.readFileSync(proxiesPath, 'utf-8')
+
+  const proxies = proxiesFile
+    .split('\n')
+    .map((proxy) => {
+      const proxyArr = proxy.split(':')
+      return [proxyArr[0], parseInt(proxyArr[1])] as [string, number]
+    })
+    .filter(
+      (proxy) =>
+        proxy.length === 2 && proxy[0] && proxy[1] >= 0 && proxy[1] < 65536
+    )
+
+  if (options.includes('--generate') || options.includes('-g')) {
+    await generate(proxiesPath)
+  }
+
   const workingProxies: string[] = []
 
   const checks = proxies.map((proxy) => {
     const host = proxy[0]
-    const port = parseInt(proxy[1])
+    const port = proxy[1]
     const proxyStr = `${host}:${port}`
 
     return new Promise<void>((resolve) => {
@@ -49,4 +61,4 @@ const checkProxies = async () => {
   console.log('Done!')
 }
 
-checkProxies()
+main()
