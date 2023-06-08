@@ -13,6 +13,6 @@
 
 2. Build the project: `pnpm run build`
 
-3. Run the project, either by using `start.sh` or `npm run start`
+3. Run the project using `npm run start`
 
 4. Your filtered proxies are in `filtered.txt`
