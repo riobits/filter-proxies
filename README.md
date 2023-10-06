@@ -1,6 +1,8 @@
 # Proxies filter
 
-1. Create a file called `proxies.txt` and it should contain the proxies that you want to filter (checking if they are working) and the content should be similar to:
+1. Create `proxies.txt` file and add the proxies that you want to filter
+
+`proxies.txt`
 
 ```
 72.206.181.123:4145
@@ -11,8 +13,14 @@
 72.195.34.35:27360
 ```
 
-2. Build the project: `pnpm run build`
+2. Build the project: `pnpm build`
 
-3. Run the project using `npm run start`
+3. Run the project using `pnpm start`
 
 4. Your filtered proxies are in `filtered.txt`
+
+If you don't have proxies you can get proxies with
+
+```bash
+pnpm start -g
+```
