@@ -6,9 +6,18 @@ import generate from './generate'
 const main = async () => {
   const options = process.argv.slice(2)
 
-  const proxiesPath = path.join(process.cwd(), 'proxies.txt')
+  const proxiesFilePath = path.join(process.cwd(), 'proxies.txt')
+  const proxiesFileExists = fs.existsSync(proxiesFilePath)
 
-  const proxiesFile = fs.readFileSync(proxiesPath, 'utf-8')
+  if (!proxiesFileExists) {
+    console.log('proxies.txt not found!')
+    console.log(
+      "If you don't have proxies you can get some with `pnpm start -g`"
+    )
+    return
+  }
+
+  const proxiesFile = fs.readFileSync(proxiesFilePath, 'utf-8')
 
   const proxies = proxiesFile
     .split('\n')
@@ -22,7 +31,7 @@ const main = async () => {
     )
 
   if (options.includes('--generate') || options.includes('-g')) {
-    await generate(proxiesPath)
+    await generate(proxiesFilePath)
   }
 
   const workingProxies: string[] = []
